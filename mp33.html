@@ -97,56 +97,24 @@ function EnterNumbers (objASheet){
 		 var myMonthlyPayment = objASheet.Cells(3,2).value;
 		 
 		 var totalInterestPaid = 0;
-		 var yearCounter = 0;
+		 var monthCounter = 0;
 		 
-		 while(yearCounter<30){
-		 for(var i = 0; myLoanAmount > 0; i++){
-		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
-		 
-		 interestForMonth = myLoanAmount * (myInterestRate/12);
-		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
-	     myLoanAmount = loanAtEndOfMonth;
-			
-		 interestTotal = interestTotal + interestForMonth;
-		 
-		
-		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
-		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
-		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
-		 
-		 
-		 
-		 
-var thirtyYearCounter = 0;
-
-
-		 for(var i = 0; myLoanAmount > 0; i++){
-		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
-		 
-		 interestForMonth = myLoanAmount * (myInterestRate/12);
-		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
-
-
-	     myLoanAmount = loanAtEndOfMonth;
-			
-		 interestTotal = interestTotal + interestForMonth;
-		 
-		
-		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
-		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
-		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
-		 
-		 
-		 yearCounter++;
-                            thirtyYearCounter++;
-			rowIncrementer++;
-
-if (thirtyYearCounter == 30) {
-myLoanAmount = 0;
-}
-
-			objASheet.Cells(4+rowIncrementer,3) = yearCounter;
-}}
+	while(monthCounter<(30*12)){//30 years
+		objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
+		interestForMonth = myLoanAmount * (myInterestRate/12);
+		loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
+		myLoanAmount = loanAtEndOfMonth;
+		interestTotal = interestTotal + interestForMonth;
+		objASheet.Cells(4+rowIncrementer,3) = monthCounter;
+		objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
+		objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
+		objASheet.Cells(4+rowIncrementer,7) = interestTotal;
+		monthCounter++;
+		rowIncrementer++;
+		if(myLoanAmount <= 0){
+			break;
+		}
+	}
 		 
 			
 			
