@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -16,6 +15,7 @@
 	<body>
 
 	
+
 	<Table>
 	<TR>
 	<TD> Loan amount</TD>
@@ -29,11 +29,21 @@
 	<TD> Monthly payment</TD>
 	<TD><Input Type = "Text" id = "monthlyPayment" Name = "monthlyPayment" Value = "Monthly Payment ($)" /></TD>
 	</TR>
+	<TD> Total Amount Paid</TD>
+	<TD><Input Type = "Text" id = "totalAmountPaid" Name = "totalAmountPaid" Value = "Amount Paid ($)" /></TD>
+	</TR>
+	<TR>
+	<TD> Total Interest Paid</TD>
+	<TD><Input Type = "Text" id = "totalIntPaid" Name = "totalIntPaid" Value = "Total Interest Paid ($)" /></TD>
+	</TR>
+	<TR>
+	<TD> Months To Repay</TD>
+	<TD><Input Type = "Text" id = "monthsToRepay" Name = "monthsToRepay" Value = "# of Months To Repay" /></TD>
+	</TR>
 </Table>
 	<div><Input Type = "Button" id = "SubmitButton" Name = "SubmitButton" Value = "Submit" /> </div>
-	<div>Show Excel PageM</div>
+	<div>Show Excel Page</div>
 	<div><Input Type="CheckBox" id="ShowExcelPage" Name="ShowExcelPage" Value = ""/> </div>
-	
 	
 
 
@@ -45,9 +55,9 @@ function init() {
 	document.getElementById("interestRate").onfocus = function () {this.value = "";};
 	document.getElementById("monthlyPayment").onfocus = function () {this.value = "";};
 	
-	//document.getElementById("totalAmountPaid").disabled = true;
-//	document.getElementById("totalIntPaid").disabled = true;
-	//document.getElementById("monthsToRepay").disabled = true;
+	document.getElementById("totalAmountPaid").disabled = true;
+	document.getElementById("totalIntPaid").disabled = true;
+  	document.getElementById("monthsToRepay").disabled = true;
 
 	
 	document.getElementById("SubmitButton").onclick = programMain;
@@ -97,56 +107,24 @@ function EnterNumbers (objASheet){
 		 var myMonthlyPayment = objASheet.Cells(3,2).value;
 		 
 		 var totalInterestPaid = 0;
-		 var yearCounter = 0;
+		 var monthCounter = 0;
 		 
-		 while(yearCounter<30){
-		 for(var i = 0; myLoanAmount > 0; i++){
-		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
-		 
-		 interestForMonth = myLoanAmount * (myInterestRate/12);
-		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
-	     myLoanAmount = loanAtEndOfMonth;
-			
-		 interestTotal = interestTotal + interestForMonth;
-		 
-		
-		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
-		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
-		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
-		 
-		 
-		 
-		 
-var thirtyYearCounter = 0;
-
-
-		 for(var i = 0; myLoanAmount > 0; i++){
-		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
-		 
-		 interestForMonth = myLoanAmount * (myInterestRate/12);
-		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
-
-
-	     myLoanAmount = loanAtEndOfMonth;
-			
-		 interestTotal = interestTotal + interestForMonth;
-		 
-		
-		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
-		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
-		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
-		 
-		 
-		 yearCounter++;
-                            thirtyYearCounter++;
-			rowIncrementer++;
-
-if (thirtyYearCounter == 30) {
-myLoanAmount = 0;
-}
-
-			objASheet.Cells(4+rowIncrementer,3) = yearCounter;
-}}
+	while(monthCounter<(30*12)){//30 years
+		objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
+		interestForMonth = myLoanAmount * (myInterestRate/12);
+		loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
+		myLoanAmount = loanAtEndOfMonth;
+		interestTotal = interestTotal + interestForMonth;
+		objASheet.Cells(4+rowIncrementer,3) = monthCounter;
+		objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
+		objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
+		objASheet.Cells(4+rowIncrementer,7) = interestTotal;
+		monthCounter++;
+		rowIncrementer++;
+		if(myLoanAmount <= 0){
+			break;
+		}
+	}
 		 
 			
 			
@@ -373,6 +351,3 @@ function IsSheetNameValid(xlAppl, newSheetName){
 
 </body>
 </html>
-	
-	
-	
