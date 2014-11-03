@@ -1,0 +1,378 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset = "utf-8">
+	
+	<title> Loans</title>
+	<!--[if lt IE 9]>
+    <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+	
+	<link rel = "stylesheet" href = "css/styles.css">
+	
+</head>
+
+	<body>
+
+	
+	<Table>
+	<TR>
+	<TD> Loan amount</TD>
+	<TD><Input Type = "Text" id = "loanAmount" Name = "loanAmount" Value = "Loan Amoount ($)" /></TD>
+	</TR>
+	<TR>
+	<TD> Interest rate</TD>
+	<TD><Input Type = "Text" id = "interestRate" Name = "interestRate" Value = "Interest Rate (%)" /></TD>
+	</TR>
+	<TR>
+	<TD> Monthly payment</TD>
+	<TD><Input Type = "Text" id = "monthlyPayment" Name = "monthlyPayment" Value = "Monthly Payment ($)" /></TD>
+	</TR>
+</Table>
+	<div><Input Type = "Button" id = "SubmitButton" Name = "SubmitButton" Value = "Submit" /> </div>
+	<div>Show Excel PageM</div>
+	<div><Input Type="CheckBox" id="ShowExcelPage" Name="ShowExcelPage" Value = ""/> </div>
+	
+	
+
+
+<script type = "text/javascript"> 
+var excAppl = new ActiveXObject("Excel.Application");
+window.onload = init;
+function init() {
+    document.getElementById("loanAmount").onfocus = function () { this.value = ""; };
+	document.getElementById("interestRate").onfocus = function () {this.value = "";};
+	document.getElementById("monthlyPayment").onfocus = function () {this.value = "";};
+	
+	//document.getElementById("totalAmountPaid").disabled = true;
+//	document.getElementById("totalIntPaid").disabled = true;
+	//document.getElementById("monthsToRepay").disabled = true;
+
+	
+	document.getElementById("SubmitButton").onclick = programMain;
+	}
+	
+	
+	function programMain (){
+      var aBook = OpenWorkBook(excAppl);
+      var aSheet = InitializeExcelPage(excAppl);
+      EnterNumbers (aSheet);
+	  var totalInterest2 = 0;
+	//  totalInterest2 = activeSheet.Range("E4:E24").Select ;
+	//  window.alert(totalInterest2);
+    // var result = ReturnResult (aSheet);
+	 // var totalInterest2 = 0;
+	//	totalInterest2 = objASheet.Range("E4:E24").Cells(1, 1).Formula = "=Rand()"
+		//	window.alert(totalInterest2);
+		//	
+		//	totalInterest2 = objASheet.Cells(2, 1).Formula = "=Sum(B1:B5)"
+		//	window.alert(totalInterest2);
+      //document.getElementById("monthlyPayment").value = result;
+      SaveExcelWorkBook (excAppl,aBook); 
+}
+
+
+
+
+function EnterNumbers (objASheet){
+         objASheet.Cells(1,2) = loanAmount.value ; 
+		 objASheet.Cells(2,2) = interestRate.value;
+		 objASheet.Cells(3,2) = monthlyPayment.value;
+		 objASheet.Cells(3,4) = "Beg. Bal.";
+		 objASheet.Cells(3,5) = "Interest This Month";
+		 objASheet.Cells(3,6) = "End. Bal.";
+		 
+		 var loanAtEndOfMonth = 0;
+		 
+		 var interestForMonth = 0;
+		 
+		 var interestTotal = 0;
+		 
+		 var rowIncrementer = 0;
+		 var totalInterest2= 0;
+		 
+		 var myLoanAmount = objASheet.Cells(1,2).value;
+		 var myInterestRate = objASheet.Cells(2,2).value;
+		 var myMonthlyPayment = objASheet.Cells(3,2).value;
+		 
+		 var totalInterestPaid = 0;
+		 var yearCounter = 0;
+		 
+		 while(yearCounter<30){
+		 for(var i = 0; myLoanAmount > 0; i++){
+		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
+		 
+		 interestForMonth = myLoanAmount * (myInterestRate/12);
+		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
+	     myLoanAmount = loanAtEndOfMonth;
+			
+		 interestTotal = interestTotal + interestForMonth;
+		 
+		
+		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
+		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
+		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
+		 
+		 
+		 
+		 
+var thirtyYearCounter = 0;
+
+
+		 for(var i = 0; myLoanAmount > 0; i++){
+		 objASheet.Cells(4+rowIncrementer,4) = myLoanAmount;
+		 
+		 interestForMonth = myLoanAmount * (myInterestRate/12);
+		 loanAtEndOfMonth = myLoanAmount + interestForMonth - myMonthlyPayment;
+
+
+	     myLoanAmount = loanAtEndOfMonth;
+			
+		 interestTotal = interestTotal + interestForMonth;
+		 
+		
+		 objASheet.Cells(4+rowIncrementer,5) = interestForMonth;
+		 objASheet.Cells(4+rowIncrementer,6) = myLoanAmount;
+		 objASheet.Cells(4+rowIncrementer,7) = interestTotal;
+		 
+		 
+		 yearCounter++;
+                            thirtyYearCounter++;
+			rowIncrementer++;
+
+if (thirtyYearCounter == 30) {
+myLoanAmount = 0;
+}
+
+			objASheet.Cells(4+rowIncrementer,3) = yearCounter;
+}}
+		 
+			
+			
+			}
+			}
+	
+			//totalInterest2 = objASheet.Range("E4 : E24").value;
+          /// window.alert(totalInterest2);
+			
+			
+			
+		 //objASheet.Cells(4,3).FormulaR1C1 = interestAfter1stmonth.value;
+		 
+         //objASheet.Cells(4,2).FormulaR1C1 = "=R[-3]C*(R[-2]C/12)";
+		 
+		 
+		 //objASheet.Cells(4,4).FormulaR1C1 = "=R[-3]C[-2] - R[-1]C[-2] + RC[-2]";
+		 
+		 //var countSubtractor = 5;
+		 //objASheet.Cells(5,count).FormulaR1C1 ="R[countAdder]C - R[countAdder]C[-2];
+		 
+		 
+		 
+		 
+		 
+		 //objASheet.Cells(1,1).FormulaR1c1 = "=R[7]C[6]"		 
+		 
+		 
+  
+  
+  
+  //InterestMonthly
+  //var oneMonthsInterest;
+  //var newMonthsTotal;
+  //var singleCount=0;
+  
+ // if (singleCount < 1){
+  //firstMonthsInterest = loanAmount.value * (interestRate.value/12);
+ // firstMonthsTotal = loanAmount.value - monthlyPayment.value + firstMonthsInterest;
+ // singleCount++;
+  //}//
+  
+  
+  
+  
+
+function InitializeExcelPage(oExcAppl) {
+        oExcAppl.Application.WorkSheets.Add()
+        var activeSheet = oExcAppl.Application.ActiveSheet;
+        var newSheetName = "Example Sheet";
+        if(!IsSheetNameValid(oExcAppl, newSheetName))
+        {                               
+           newSheetName = newSheetName + "X";
+        }
+        activeSheet.Name = newSheetName;
+		activeSheet.Cells(1,1) = "Loan Amount";
+		activeSheet.Cells(2,1) = "Interest Rate";
+		activeSheet.Cells(3,1) = "Monthly Payment";
+        return (activeSheet);
+             
+
+    }
+	
+	
+function IsSheetNameValid(xlAppl, newSheetName){
+        var allSheets = new Enumerator(xlAppl.Application.Worksheets);
+        var sheet;
+        var IsSheetNameOK = true;  
+        allSheets.moveFirst();
+        while (allSheets.atEnd() == false) {
+            sheet = allSheets.item();
+            if (sheet.name == newSheetName) {
+                IsSheetNameOK = false; 
+            }
+            allSheets.moveNext();
+        }
+        return(IsSheetNameOK);
+   }
+   
+   
+    function ReturnResult (asheet){
+                return (asheet.Cells(2,3).value);
+  }
+  
+  
+  function SaveExcelWorkBook(xlAppl,objAbook){
+      var fileName = objAbook.Name;   //existing name - maybe just the default
+      var filterString = "Excel Files (*.xlsx;*.xls),*.xlsx;*.xls";
+      var boxTitle = "Please enter a name for your new workbook:";
+      var WBName = xlAppl.Application.GetSaveAsFileName(fileName,
+                      filterString, 1, boxTitle);
+      objAbook.SaveAs(WBName);
+      //   assigns the name and saves new workbook
+  }
+  
+  
+  
+  
+  
+  
+  
+  function OpenWorkBook(oExcAppl){
+    var currentFolder = CurrentFolderFromURL();
+
+   
+    var msoFileDialogFilePicker = 3	;
+    var msoFileDialogFolderPicker	= 4;	
+    var msoFileDialogOpen  = 	1;	
+    var msoFileDialogSaveAs  =	2;    
+    
+    var dlgOpen = oExcAppl.Application.FileDialog(msoFileDialogOpen);
+
+    with (dlgOpen){
+        AllowMultiSelect = "False";
+        InitialFileName = currentFolder;
+        Filters.Clear();
+        Filters.Add ("Existing Excel Files", "*.xls;*.xlsx");
+        Title = "Select File - No Selection opens new Workbook";
+    }
+    
+    if ( dlgOpen.Show() ) {               
+        var selectedFile = dlgOpen.SelectedItems(1);
+        oExcAppl.Application.Workbooks.Open(selectedFile);
+        window.alert ("after workbook open")
+    }else{
+        oExcAppl.Application.Workbooks.Add();
+    }
+	
+    if (ShowExcelPage.checked) {
+        oExcAppl.Application.Visible = "True";
+    } else {
+        oExcAppl.Application.Visible = "False";
+    }
+    var activeBook = oExcAppl.Application.ActiveWorkbook;
+    return (activeBook);
+	}
+	
+	
+	
+	 function ShowExcelPage_onClick() {
+      if (ShowExcelPage.checked ) {
+          excAppl.Application.Visible = "True";
+      }else{
+      excAppl.Application.Visible = "False";
+      }
+    }
+	
+	
+	 function SaveExcel_onClick(){
+        excAppl.Application.Visible = "True";
+        excAppl.Application.DisplayAlerts = "True";
+      excAppl.Application.Quit();
+      window.Close;
+    }
+	
+	
+	
+  function QuitExcel_onClick(){
+        excAppl.Application.Visible = "False";
+        excAppl.Application.DisplayAlerts = "False";
+      excAppl.Application.Quit();
+      window.close();
+    }
+	
+	
+	
+	function CurrentFolderFromURL (){
+    //Function currentFolderFromURL.js
+    // Input: none
+    //Output: function value os the Windows path to the current
+    //working directory.
+    // function is used fromwithin the IE browser to find the
+    //  same information as one gets fromthe WScript engine with
+    //  a vbs program running under the script engine.
+    //Author: C. Jackels, July 11
+    //
+    var ieObj;
+    // string constants
+    var FWDSLASH = "/";
+    var BCKSLASH = "\\";
+    var PCT20 = "%20";
+    var BLANK = " ";
+    var DRVLETTER = "C";
+                        // variables used in pathname below
+    //
+    //references window object within the IE browser
+    //and the document object within it.
+    //
+    ieObj = window.document;  //component of the IE object
+    //
+    //Extracts the present html document url and converts to pathname
+    var currentURL = ieObj.location.pathname;   //full url of present page
+            //locate the last backslash so as to clip off the file name
+            // that follows it
+    var pos = currentURL.lastIndexOf(FWDSLASH);
+            // character index starts at zero (1st character)
+    var string1 = currentURL.substring(0, pos + 1);
+            // substring includes up to, but not including the end 
+            // specified (pos +1)   We want the character at pos.
+    var pos2 = currentURL.indexOf(DRVLETTER);
+            //  The drive letter may be preceded by some slashes.
+    string1 = string1.substring(pos2);
+            //  substring method with one parameter takes up through
+            // the end of the string
+            // The replace method uses regular expressions to identify
+            // the substrings for replacement
+    var re = /%20/g
+            // %20 appears in url//s where Window paths have blanks
+            //  The g indicates global - replace them all
+    string1 = string1.replace(re, " ");
+             //
+            // the slashes must be turned, because windows paths use
+            // backslahses where URL//s use forward slashes
+    re = /\//g;
+            // this regular expression is for all occurrences of the forward slash
+            // it must be escaped with \ because the forward slash dilineates the
+            // Regular Expression pattern.
+    string1 = string1.replace(re, "\\");
+            // The double \\ is needed.  A single \ escapes the quote mark
+    return (string1);
+}    // end of function CurrentFolderFromUrl
+
+</script>
+
+</body>
+</html>
+	
+	
+	
